@@ -21,4 +21,9 @@ public class ExceptionController {
 
         return ResponseEntity.badRequest().body(errorsFormated);
     }
-}
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ResponseMessage> handleBusinessLogicException(RuntimeException ex) {
+        return ResponseEntity.badRequest().body(new ResponseMessage(ex.getMessage()));
+    }
+};
