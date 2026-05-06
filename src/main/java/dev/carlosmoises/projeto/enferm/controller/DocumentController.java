@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class DocumentController {
     }
 
     @DeleteMapping("/patient/{documentId}")
-    public ResponseEntity<Void> deleteDocument(@PathVariable("documentId") Long documentId) {
+    public ResponseEntity<Void> deleteDocument(@PathVariable("documentId") Long documentId) throws IOException {
         documentService.deleteDocument(documentId);
         return ResponseEntity.noContent().build();
     }

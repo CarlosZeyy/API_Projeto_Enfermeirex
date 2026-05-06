@@ -71,7 +71,14 @@ public class DocumentService {
         ).toList();
     }
 
-    public void deleteDocument(Long documentId) {
+    public void deleteDocument(Long documentId) throws IOException {
+        try {
+            var document = documentRepository.findById(documentId).orElseThrow(() -> new RuntimeException("Arquivo não encontrado."));
+            Files.deleteIfExists(Path.of(document.getFilePath()));
+        } catch (IOException error) {
+            throw new RuntimeException(error);
+        }
+
         documentRepository.deleteById(documentId);
     }
 }
