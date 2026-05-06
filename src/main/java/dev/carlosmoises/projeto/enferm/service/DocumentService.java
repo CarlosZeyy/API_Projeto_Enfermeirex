@@ -70,4 +70,8 @@ public class DocumentService {
                 ))
         ).toList();
     }
+
+    public void deleteDocument(Long documentId) {
+        documentRepository.deleteById(documentId);
+    }
 }

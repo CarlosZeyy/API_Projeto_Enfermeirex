@@ -32,4 +32,10 @@ public class DocumentController {
         var documents = documentService.getPatientDocuments(patientId);
         return ResponseEntity.ok(documents);
     }
+
+    @DeleteMapping("/patient/{documentId}")
+    public ResponseEntity<Void> deleteDocument(@PathVariable("documentId") Long documentId) {
+        documentService.deleteDocument(documentId);
+        return ResponseEntity.noContent().build();
+    }
 }
