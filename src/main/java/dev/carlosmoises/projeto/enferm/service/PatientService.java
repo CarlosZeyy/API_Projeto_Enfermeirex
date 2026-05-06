@@ -19,7 +19,7 @@ public class PatientService {
     }
 
     public Long createPatient(CreatePatientDTO createPatientDTO) {
-        var patient = new Patient(null, createPatientDTO.name(), createPatientDTO.phone(), createPatientDTO.address(), createPatientDTO.obs(), null, null);
+        var patient = new Patient(null, createPatientDTO.name(), createPatientDTO.phone(), createPatientDTO.address(), createPatientDTO.obs(), null, null, null);
 
         var patientSaved = patientRepository.save(patient);
 

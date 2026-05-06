@@ -1,5 +1,6 @@
 package dev.carlosmoises.projeto.enferm.service;
 
+import dev.carlosmoises.projeto.enferm.DTO.DocumentResponseDTO;
 import dev.carlosmoises.projeto.enferm.model.Document;
 import dev.carlosmoises.projeto.enferm.repository.DocumentRepository;
 import dev.carlosmoises.projeto.enferm.repository.PatientRepository;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -22,7 +24,7 @@ public class DocumentService {
         this.documentRepository = documentRepository;
     }
 
-    public Long createFileUpdload(Long patientId, MultipartFile file) {
+    public Long createFileUpload(Long patientId, MultipartFile file) {
         var patient = patientRepository.findById(patientId).orElseThrow(() -> new RuntimeException("ID do paciente não encontrado"));
 
         if (file.isEmpty()) {
@@ -51,9 +53,21 @@ public class DocumentService {
             var documentSaved = documentRepository.save(document);
 
             return documentSaved.getDocumentId();
-            
+
         } catch (IOException e) {
             throw new RuntimeException("Falha ao salvar o arquivo físico: " + e.getMessage());
         }
+    }
+
+    public List<DocumentResponseDTO> getPatientDocuments(Long patientId) {
+        return documentRepository.findByPatientIdOrderByCreatedAtDesc(patientId).stream().map(
+                (document -> new DocumentResponseDTO(
+                        document.getDocumentId(),
+                        document.getFileName(),
+                        document.getFilePath(),
+                        document.getPatient().getId(),
+                        document.getCreatedAt()
+                ))
+        ).toList();
     }
 }
