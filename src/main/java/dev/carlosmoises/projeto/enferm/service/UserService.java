@@ -1,6 +1,7 @@
 package dev.carlosmoises.projeto.enferm.service;
 
 import dev.carlosmoises.projeto.enferm.DTO.CreateUserDTO;
+import dev.carlosmoises.projeto.enferm.DTO.UpdatePasswordDTO;
 import dev.carlosmoises.projeto.enferm.model.User;
 import dev.carlosmoises.projeto.enferm.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +26,24 @@ public class UserService {
 
 
         var user = new User(null, createUserDTO.email(), createUserDTO.coren(), hashPassword);
+
+        var userSaved = userRepository.save(user);
+
+        return userSaved.getId();
+    }
+
+    public Long resetPassword(User user, UpdatePasswordDTO updatePasswordDTO) {
+        var passwordUser = user.getPassword();
+        var currentPassword = updatePasswordDTO.currentPassword();
+        var newPassword = updatePasswordDTO.newPassword();
+
+        if (!encoder.matches(currentPassword, passwordUser)) {
+            throw new IllegalArgumentException("Senha atual incorreta");
+        }
+
+        var newHash = encoder.encode(newPassword);
+
+        user.setPassword(newHash);
 
         var userSaved = userRepository.save(user);
 
