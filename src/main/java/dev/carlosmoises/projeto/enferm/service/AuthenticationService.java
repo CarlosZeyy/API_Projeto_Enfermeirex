@@ -1,6 +1,7 @@
 package dev.carlosmoises.projeto.enferm.service;
 
 import dev.carlosmoises.projeto.enferm.model.PasswordResetToken;
+import dev.carlosmoises.projeto.enferm.model.User;
 import dev.carlosmoises.projeto.enferm.repository.PasswordResetTokenRepository;
 import dev.carlosmoises.projeto.enferm.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,9 +37,9 @@ public class AuthenticationService implements UserDetailsService {
     }
 
     public void requestPasswordReset(String identification) {
-        var userExists = userRepository.findByEmailOrCoren(identification, identification);
+        var userExists = userRepository.findOptionalByEmailOrCoren(identification, identification);
 
-        if (!userExists.isEnabled()) {
+        if (userExists.isEmpty()) {
             return;
         }
 
@@ -46,12 +47,14 @@ public class AuthenticationService implements UserDetailsService {
 
         PasswordResetToken ticket = new PasswordResetToken();
 
+        User userFound = userExists.get();
+
         ticket.setToken(token);
-        ticket.setUser(userExists);
+        ticket.setUser(userFound);
         ticket.setExpiryDate(LocalDateTime.now().plusMinutes(15));
 
         passwordResetTokenRepository.save(ticket);
 
-        emailService.sendPasswordResetEmail(identification, "Recuperação de Senha", "Acesse o link para redefinir: http://localhost:5173/reset-password?token=" + token);
+        emailService.sendPasswordResetEmail(userFound.getEmail(), "Recuperação de Senha", "Acesse o link para redefinir: http://localhost:5173/reset-password?token=" + token);
     }
 }
