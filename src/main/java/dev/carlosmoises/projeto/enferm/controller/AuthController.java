@@ -2,9 +2,10 @@ package dev.carlosmoises.projeto.enferm.controller;
 
 import dev.carlosmoises.projeto.enferm.DTO.AuthDTO;
 import dev.carlosmoises.projeto.enferm.DTO.CreateUserDTO;
+import dev.carlosmoises.projeto.enferm.DTO.ForgotPasswordDTO;
 import dev.carlosmoises.projeto.enferm.DTO.TokenResponseDTO;
 import dev.carlosmoises.projeto.enferm.model.User;
-import dev.carlosmoises.projeto.enferm.repository.UserRepository;
+import dev.carlosmoises.projeto.enferm.service.AuthenticationService;
 import dev.carlosmoises.projeto.enferm.service.TokenService;
 import dev.carlosmoises.projeto.enferm.service.UserService;
 import jakarta.validation.Valid;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +27,8 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private UserService userService;
+    @Autowired
+    private AuthenticationService authenticationService;
 
     @PostMapping("/login")
     public ResponseEntity<TokenResponseDTO> createToken(@Valid @RequestBody AuthDTO authDTO) {
@@ -44,6 +46,13 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<CreateUserDTO> createUser(@Valid @RequestBody CreateUserDTO createUserDTO) {
         userService.createUser(createUserDTO);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Void> forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) {
+        authenticationService.requestPasswordReset(forgotPasswordDTO.identification());
 
         return ResponseEntity.ok().build();
     }

@@ -29,6 +29,7 @@ public class SecurityConfigs {
                 .csrf(csrf -> csrf.disable()).sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
+                    req.requestMatchers(HttpMethod.POST, "/auth/forgot-password").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/error").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/uploads/**").permitAll();
                     req.requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll();
