@@ -1,9 +1,6 @@
 package dev.carlosmoises.projeto.enferm.controller;
 
-import dev.carlosmoises.projeto.enferm.DTO.AuthDTO;
-import dev.carlosmoises.projeto.enferm.DTO.CreateUserDTO;
-import dev.carlosmoises.projeto.enferm.DTO.ForgotPasswordDTO;
-import dev.carlosmoises.projeto.enferm.DTO.TokenResponseDTO;
+import dev.carlosmoises.projeto.enferm.DTO.*;
 import dev.carlosmoises.projeto.enferm.model.User;
 import dev.carlosmoises.projeto.enferm.service.AuthenticationService;
 import dev.carlosmoises.projeto.enferm.service.TokenService;
@@ -53,6 +50,13 @@ public class AuthController {
     @PostMapping("/forgot-password")
     public ResponseEntity<Void> forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) {
         authenticationService.requestPasswordReset(forgotPasswordDTO.identification());
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Void> resetPassword(@Valid @RequestBody ResetPasswordDTO resetPasswordDTO) {
+        authenticationService.resetPassword();
 
         return ResponseEntity.ok().build();
     }
