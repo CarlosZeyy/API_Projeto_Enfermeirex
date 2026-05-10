@@ -29,8 +29,8 @@ public class UserController {
     }
 
     @PutMapping("/password")
-    public ResponseEntity<Void> resetPassword(@AuthenticationPrincipal User userlogged, @RequestBody UpdatePasswordDTO updatePasswordDTO) {
-        userService.resetPassword(userlogged, updatePasswordDTO);
+    public ResponseEntity<Void> updatePassword(@AuthenticationPrincipal User userlogged, @RequestBody UpdatePasswordDTO updatePasswordDTO) {
+        userService.updatePassword(userlogged, updatePasswordDTO);
 
         return ResponseEntity.noContent().build();
     }

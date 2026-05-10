@@ -32,7 +32,7 @@ public class UserService {
         return userSaved.getId();
     }
 
-    public Long resetPassword(User user, UpdatePasswordDTO updatePasswordDTO) {
+    public Long updatePassword(User user, UpdatePasswordDTO updatePasswordDTO) {
         var passwordUser = user.getPassword();
         var currentPassword = updatePasswordDTO.currentPassword();
         var newPassword = updatePasswordDTO.newPassword();
