@@ -56,7 +56,14 @@ public class AuthenticationService implements UserDetailsService {
         var atIndex = emailUser.indexOf("@");
         var afterAt = emailUser.substring(atIndex);
         var initialEmail = emailUser.substring(0, 2);
-        var hiddenEmail = initialEmail + "***" + afterAt;
+        var endEmail = emailUser.substring(atIndex - 1);
+        var hiddenEmail = initialEmail + "***" + endEmail + afterAt;
+
+        if (atIndex <= 2) {
+            var firstLetter = emailUser.substring(0, 1);
+            var hiddenShortEmail = firstLetter + "***" + afterAt;
+            return "Verifique o e-mail " + hiddenShortEmail + " para recuperar sua senha:";
+        }
 
         ticket.setToken(token);
         ticket.setUser(userFound);
