@@ -53,7 +53,10 @@ public class AuthenticationService implements UserDetailsService {
         User userFound = userExists.get();
 
         String emailUser = userFound.getEmail();
-        var hiddenEmail = emailUser.substring(1).indexOf("@");
+        var atIndex = emailUser.indexOf("@");
+        var afterAt = emailUser.substring(atIndex);
+        var initialEmail = emailUser.substring(0, 2);
+        var hiddenEmail = initialEmail + "***" + afterAt;
 
         ticket.setToken(token);
         ticket.setUser(userFound);
