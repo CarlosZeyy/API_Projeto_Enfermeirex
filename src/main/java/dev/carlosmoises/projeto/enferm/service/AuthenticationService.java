@@ -39,11 +39,11 @@ public class AuthenticationService implements UserDetailsService {
 
     }
 
-    public void requestPasswordReset(String identification) {
+    public String requestPasswordReset(String identification) {
         var userExists = userRepository.findOptionalByEmailOrCoren(identification, identification);
 
         if (userExists.isEmpty()) {
-            return;
+            throw new RuntimeException("Usuário não encontrado.");
         }
 
         String token = UUID.randomUUID().toString();
@@ -52,6 +52,9 @@ public class AuthenticationService implements UserDetailsService {
 
         User userFound = userExists.get();
 
+        String emailUser = userFound.getEmail();
+        var hiddenEmail = emailUser.substring(1).indexOf("@");
+
         ticket.setToken(token);
         ticket.setUser(userFound);
         ticket.setExpiryDate(LocalDateTime.now().plusMinutes(15));
@@ -59,6 +62,8 @@ public class AuthenticationService implements UserDetailsService {
         passwordResetTokenRepository.save(ticket);
 
         emailService.sendPasswordResetEmail(userFound.getEmail(), "Recuperação de Senha", "Acesse o link para redefinir: http://localhost:5173/reset-password?token=" + token);
+
+        return "Verifique o e-mail " + hiddenEmail + " para recuperar sua senha:";
     }
 
     public void resetPassword(String token, String newPassword) {
