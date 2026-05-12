@@ -22,7 +22,8 @@ public class UserController {
         var user = new UserResponseDTO(
                 userLogged.getId(),
                 userLogged.getEmail(),
-                userLogged.getCoren()
+                userLogged.getCoren(),
+                userLogged.getUsername()
         );
 
         return ResponseEntity.ok(user);
