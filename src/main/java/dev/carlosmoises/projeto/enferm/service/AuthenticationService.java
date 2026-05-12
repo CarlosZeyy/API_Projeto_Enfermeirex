@@ -56,13 +56,17 @@ public class AuthenticationService implements UserDetailsService {
         var atIndex = emailUser.indexOf("@");
         var afterAt = emailUser.substring(atIndex);
         var initialEmail = emailUser.substring(0, 2);
-        var endEmail = emailUser.substring(atIndex - 1);
+        var endEmail = emailUser.substring(atIndex - 1, atIndex);
         var hiddenEmail = initialEmail + "***" + endEmail + afterAt;
+
+        String finalMessage = "";
 
         if (atIndex <= 2) {
             var firstLetter = emailUser.substring(0, 1);
             var hiddenShortEmail = firstLetter + "***" + afterAt;
-            return "Verifique o e-mail " + hiddenShortEmail + " para recuperar sua senha:";
+            finalMessage = "Verifique o e-mail " + hiddenShortEmail + " para recuperar sua senha:";
+        } else {
+            finalMessage = "Verifique o e-mail " + hiddenEmail + " para recuperar sua senha:";
         }
 
         ticket.setToken(token);
@@ -73,7 +77,7 @@ public class AuthenticationService implements UserDetailsService {
 
         emailService.sendPasswordResetEmail(userFound.getEmail(), "Recuperação de Senha", "Acesse o link para redefinir: http://localhost:5173/reset-password?token=" + token);
 
-        return "Verifique o e-mail " + hiddenEmail + " para recuperar sua senha:";
+        return finalMessage;
     }
 
     public void resetPassword(String token, String newPassword) {
