@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public record CreateUserDTO(@NotBlank String email, @NotBlank @Size(min = 6) String password,
+public record CreateUserDTO(@NotBlank String email, @NotBlank @Size(min = 6) String password, String name,
 
                             @NotBlank
                             @Pattern(regexp = "^COREN-[A-Z]{2} \\d{4,6}-(ENF|TE|AE)$", message = "Formato de COREN inválido. Ex: COREN-SP 123456-ENF")
