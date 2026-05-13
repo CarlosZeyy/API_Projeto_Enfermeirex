@@ -2,6 +2,7 @@ package dev.carlosmoises.projeto.enferm.service;
 
 import dev.carlosmoises.projeto.enferm.DTO.CreateUserDTO;
 import dev.carlosmoises.projeto.enferm.DTO.UpdatePasswordDTO;
+import dev.carlosmoises.projeto.enferm.DTO.UserResponseDTO;
 import dev.carlosmoises.projeto.enferm.model.User;
 import dev.carlosmoises.projeto.enferm.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,7 +26,7 @@ public class UserService {
         }
 
 
-        var user = new User(null, createUserDTO.email(), createUserDTO.coren(), hashPassword);
+        var user = new User(null, createUserDTO.email(), createUserDTO.coren(), hashPassword, createUserDTO.name());
 
         var userSaved = userRepository.save(user);
 
@@ -48,5 +49,15 @@ public class UserService {
         var userSaved = userRepository.save(user);
 
         return userSaved.getId();
+    }
+
+    public String updateName(User user, UserResponseDTO userResponseDTO) {
+        var newName = userResponseDTO.name();
+
+        user.setName(newName);
+
+        var nameSaved = userRepository.save(user);
+
+        return nameSaved.getName();
     }
 }

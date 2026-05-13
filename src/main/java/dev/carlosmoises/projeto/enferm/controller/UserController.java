@@ -23,7 +23,7 @@ public class UserController {
                 userLogged.getId(),
                 userLogged.getEmail(),
                 userLogged.getCoren(),
-                userLogged.getUsername()
+                userLogged.getName()
         );
 
         return ResponseEntity.ok(user);
@@ -36,4 +36,12 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/username")
+    public ResponseEntity<ResponseMessage> updateUsername(@AuthenticationPrincipal User userlogged, @RequestBody UserResponseDTO userResponseDTO) {
+        userService.updateName(userlogged, userResponseDTO);
+
+        var response = new ResponseMessage("Nome alterado com sucesso");
+
+        return ResponseEntity.ok(response);
+    }
 }
