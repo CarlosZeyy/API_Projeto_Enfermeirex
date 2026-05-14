@@ -48,7 +48,7 @@ public class TokenService {
         }
     }
 
-    public RefreshTokenRepository createRefreshToken(User user) {
+    public RefreshToken createRefreshToken(User user) {
         var refreshToken = new RefreshToken();
         refreshToken.setToken(UUID.randomUUID().toString());
         refreshToken.setId(user.getId());
