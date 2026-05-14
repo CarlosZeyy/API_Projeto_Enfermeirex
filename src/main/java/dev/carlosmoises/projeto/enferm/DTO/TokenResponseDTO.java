@@ -1,4 +1,4 @@
 package dev.carlosmoises.projeto.enferm.DTO;
 
-public record TokenResponseDTO(String token) {
+public record TokenResponseDTO(String token, String refreshToken) {
 }
