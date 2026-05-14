@@ -76,6 +76,10 @@ public class AuthController {
 
         String newToken = tokenService.generateToken(user);
 
-        return ResponseEntity.ok(new TokenResponseDTO(newToken, refreshToken.getToken()));
+        refreshTokenRepository.delete(refreshToken);
+
+        var newRefreshToken = tokenService.createRefreshToken(user);
+
+        return ResponseEntity.ok(new TokenResponseDTO(newToken, newRefreshToken.getToken()));
     }
 }

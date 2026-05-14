@@ -2,11 +2,13 @@ package dev.carlosmoises.projeto.enferm.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import dev.carlosmoises.projeto.enferm.config.TokenExpiredException;
 import dev.carlosmoises.projeto.enferm.model.RefreshToken;
 import dev.carlosmoises.projeto.enferm.model.User;
 import dev.carlosmoises.projeto.enferm.repository.RefreshTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -48,20 +50,22 @@ public class TokenService {
         }
     }
 
+    @Transactional
     public RefreshToken createRefreshToken(User user) {
         var refreshToken = new RefreshToken();
+        refreshTokenRepository.deleteByUserId(user.getId());
         refreshToken.setToken(UUID.randomUUID().toString());
-        refreshToken.setId(user.getId());
+        refreshToken.setUser(user);
         refreshToken.setExpiryDate(LocalDateTime.now().plusDays(14));
 
         return refreshTokenRepository.save(refreshToken);
     }
 
+    @Transactional
     public RefreshToken verifyExpiration(RefreshToken token) {
         if (token.getExpiryDate().isBefore(LocalDateTime.now())) {
-            var user = new User();
-            refreshTokenRepository.deleteByUserId(user.getId());
-            throw new RuntimeException("Token de acesso expirado. Faça login novamente.");
+            refreshTokenRepository.delete(token);
+            throw new TokenExpiredException("Token de acesso expirado. Faça login novamente.");
         }
         return token;
     }
