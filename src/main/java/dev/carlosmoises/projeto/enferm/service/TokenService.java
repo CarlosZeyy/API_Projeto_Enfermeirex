@@ -57,8 +57,9 @@ public class TokenService {
         return refreshTokenRepository.save(refreshToken);
     }
 
-    public RefreshToken verifyExpiration(RefreshToken token, User user) {
+    public RefreshToken verifyExpiration(RefreshToken token) {
         if (token.getExpiryDate().isBefore(LocalDateTime.now())) {
+            var user = new User();
             refreshTokenRepository.deleteByUserId(user.getId());
             throw new RuntimeException("Token de acesso expirado. Faça login novamente.");
         }

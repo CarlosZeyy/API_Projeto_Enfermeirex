@@ -67,12 +67,12 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<TokenResponseDTO> refreshToken(@RequestBody RefreshTokenRequestDTO tokenRequestDTO) {
+    public ResponseEntity<TokenResponseDTO> refreshToken(@RequestBody @Valid RefreshTokenRequestDTO tokenRequestDTO) {
         RefreshToken refreshToken = refreshTokenRepository.findByToken(tokenRequestDTO.refreshToken()).orElseThrow(() -> new RuntimeException("Refresh Token não encontrado ou inválido no banco de dados!"));
 
-        User user = refreshToken.getUser();
+        tokenService.verifyExpiration(refreshToken);
 
-        tokenService.verifyExpiration(refreshToken, user);
+        User user = refreshToken.getUser();
 
         String newToken = tokenService.generateToken(user);
 
