@@ -1,7 +1,9 @@
 package dev.carlosmoises.projeto.enferm.controller;
 
 import dev.carlosmoises.projeto.enferm.DTO.*;
+import dev.carlosmoises.projeto.enferm.model.RefreshToken;
 import dev.carlosmoises.projeto.enferm.model.User;
+import dev.carlosmoises.projeto.enferm.repository.RefreshTokenRepository;
 import dev.carlosmoises.projeto.enferm.service.AuthenticationService;
 import dev.carlosmoises.projeto.enferm.service.TokenService;
 import dev.carlosmoises.projeto.enferm.service.UserService;
@@ -26,6 +28,8 @@ public class AuthController {
     private UserService userService;
     @Autowired
     private AuthenticationService authenticationService;
+    @Autowired
+    private RefreshTokenRepository refreshTokenRepository;
 
     @PostMapping("/login")
     public ResponseEntity<TokenResponseDTO> createToken(@Valid @RequestBody AuthDTO authDTO) {
@@ -38,7 +42,7 @@ public class AuthController {
         var accessToken = tokenService.generateToken(user);
         var refreshToken = tokenService.createRefreshToken(user);
 
-        return ResponseEntity.ok(new TokenResponseDTO(accessToken, refreshToken));
+        return ResponseEntity.ok(new TokenResponseDTO(accessToken, refreshToken.getToken()));
     }
 
     @PostMapping("/register")
@@ -60,5 +64,18 @@ public class AuthController {
         authenticationService.resetPassword(resetPasswordDTO.token(), resetPasswordDTO.newPassword());
 
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenResponseDTO> refreshToken(@RequestBody RefreshTokenRequestDTO tokenRequestDTO) {
+        RefreshToken refreshToken = refreshTokenRepository.findByToken(tokenRequestDTO.refreshToken()).orElseThrow(() -> new RuntimeException("Refresh Token não encontrado ou inválido no banco de dados!"));
+
+        User user = refreshToken.getUser();
+
+        tokenService.verifyExpiration(refreshToken, user);
+
+        String newToken = tokenService.generateToken(user);
+
+        return ResponseEntity.ok(new TokenResponseDTO(newToken, refreshToken.getToken()));
     }
 }
