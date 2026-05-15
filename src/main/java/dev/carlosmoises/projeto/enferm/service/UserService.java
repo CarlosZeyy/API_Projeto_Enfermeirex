@@ -25,7 +25,6 @@ public class UserService {
             throw new IllegalArgumentException("Email/COREN já cadastrado.");
         }
 
-
         var user = new User(null, createUserDTO.email(), createUserDTO.coren(), hashPassword, createUserDTO.name());
 
         var userSaved = userRepository.save(user);
