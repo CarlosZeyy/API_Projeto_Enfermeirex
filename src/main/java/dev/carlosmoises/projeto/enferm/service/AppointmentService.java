@@ -7,10 +7,15 @@ import dev.carlosmoises.projeto.enferm.model.Appointment;
 import dev.carlosmoises.projeto.enferm.model.StatusAppointment;
 import dev.carlosmoises.projeto.enferm.repository.AppointmentRepository;
 import dev.carlosmoises.projeto.enferm.repository.PatientRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
@@ -98,5 +103,17 @@ public class AppointmentService {
 
     public void deleteAppointment(Long id) {
         appointmentRepository.deleteById(id);
+    }
+
+    @Transactional
+    @Scheduled(cron = "0 0 0 * * *")
+    public void verifyAppointmentsExpires() {
+        var appointmentList = appointmentRepository.findByDataBeforeAndStatus(LocalDateTime.now(), StatusAppointment.AGENDADO);
+
+        appointmentList.forEach((appointment) -> appointment.setStatus(StatusAppointment.EXPIRADO));
+
+        appointmentRepository.saveAll(appointmentList);
+
+        log.info("Rodando checagem de agendamentos, quantidade de agendamentos expirados econtrados e atualizados: " + appointmentList.size());
     }
 }
