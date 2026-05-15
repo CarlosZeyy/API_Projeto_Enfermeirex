@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Slf4j
@@ -115,5 +116,24 @@ public class AppointmentService {
         appointmentRepository.saveAll(appointmentList);
 
         log.info("Rodando checagem de agendamentos, quantidade de agendamentos expirados econtrados e atualizados: " + appointmentList.size());
+    }
+
+    public List<AppointmentResponseDTO> getAppointmentOfToday() {
+        LocalDateTime today = LocalDateTime.now();
+
+        LocalDateTime initOfDay = today.toLocalDate().atStartOfDay();
+
+        LocalDateTime endOfDay = today.with(LocalTime.MAX);
+
+        var appointments = appointmentRepository.findByDataBetweenOrderByDataAsc(initOfDay, endOfDay);
+
+        return appointments.stream().map(
+                appointment -> new AppointmentResponseDTO(
+                        appointment.getAppointmentId(),
+                        appointment.getPatient().getId(),
+                        appointment.getPatient().getName(),
+                        appointment.getData(),
+                        appointment.getStatus()
+                )).toList();
     }
 }

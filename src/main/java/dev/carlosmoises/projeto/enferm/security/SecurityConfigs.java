@@ -32,6 +32,7 @@ public class SecurityConfigs {
                     req.requestMatchers(HttpMethod.POST, "/auth/forgot-password").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/error").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/uploads/**").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "/appointments/**").permitAll();
                     req.requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll();
                     req.anyRequest().authenticated();
                 }).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();

@@ -15,24 +15,24 @@ import java.util.List;
 public class AppointmentController {
     private final AppointmentService appointmentService;
 
-     AppointmentController (AppointmentService appointmentService) {
+    AppointmentController(AppointmentService appointmentService) {
         this.appointmentService = appointmentService;
     }
 
     @PostMapping()
     public ResponseEntity<ResponseMessage> createAppointment(@RequestBody CreateAppointmentDTO createAppointmentDTO) {
-         var appointmentId = appointmentService.createAppointment(createAppointmentDTO);
+        var appointmentId = appointmentService.createAppointment(createAppointmentDTO);
 
-         var response = new ResponseMessage("Agendamento criado com sucesso.");
+        var response = new ResponseMessage("Agendamento criado com sucesso.");
 
-         return ResponseEntity.created(URI.create("/appointments/" + appointmentId)).body(response);
+        return ResponseEntity.created(URI.create("/appointments/" + appointmentId)).body(response);
     }
 
     @GetMapping()
     public ResponseEntity<List<AppointmentResponseDTO>> getAllAppointments() {
-         var appointments = appointmentService.getAllAppointments();
+        var appointments = appointmentService.getAllAppointments();
 
-         return ResponseEntity.ok(appointments);
+        return ResponseEntity.ok(appointments);
     }
 
     @GetMapping("/{appointmentId}")
@@ -43,21 +43,27 @@ public class AppointmentController {
 
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<List<AppointmentResponseDTO>> getPatientAppointments(@PathVariable("patientId") Long patientId) {
-         var patientAppointment = appointmentService.getAppointmentsByPatientId(patientId);
+        var patientAppointment = appointmentService.getAppointmentsByPatientId(patientId);
 
-         return ResponseEntity.ok(patientAppointment);
+        return ResponseEntity.ok(patientAppointment);
     }
 
     @PutMapping("/{appointmentId}")
     public ResponseEntity<AppointmentResponseDTO> updateAppointment(@PathVariable("appointmentId") Long appointmentId, @RequestBody UpdateAppointmentDTO updateAppointmentDTO) {
-         var updateAppointment = appointmentService.updateAppointment(appointmentId, updateAppointmentDTO);
+        var updateAppointment = appointmentService.updateAppointment(appointmentId, updateAppointmentDTO);
 
-         return ResponseEntity.ok(updateAppointment);
+        return ResponseEntity.ok(updateAppointment);
     }
 
     @DeleteMapping("/{appointmentId}")
     public ResponseEntity<AppointmentResponseDTO> deleteAppointment(@PathVariable("appointmentId") Long appointmentId) {
-         appointmentService.deleteAppointment(appointmentId);
-         return ResponseEntity.noContent().build();
+        appointmentService.deleteAppointment(appointmentId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/today")
+    public ResponseEntity<List<AppointmentResponseDTO>> getAppointmentsOfDay() {
+        var appointmentOfDay = appointmentService.getAppointmentOfToday();
+        return ResponseEntity.ok(appointmentOfDay);
     }
 }
