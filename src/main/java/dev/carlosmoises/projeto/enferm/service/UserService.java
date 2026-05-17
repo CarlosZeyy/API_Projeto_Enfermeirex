@@ -1,6 +1,7 @@
 package dev.carlosmoises.projeto.enferm.service;
 
 import dev.carlosmoises.projeto.enferm.DTO.CreateUserDTO;
+import dev.carlosmoises.projeto.enferm.DTO.UpdateAvatarDTO;
 import dev.carlosmoises.projeto.enferm.DTO.UpdatePasswordDTO;
 import dev.carlosmoises.projeto.enferm.DTO.UserResponseDTO;
 import dev.carlosmoises.projeto.enferm.model.User;
@@ -25,7 +26,7 @@ public class UserService {
             throw new IllegalArgumentException("Email/COREN já cadastrado.");
         }
 
-        var user = new User(null, createUserDTO.email(), createUserDTO.coren(), hashPassword, createUserDTO.name());
+        var user = new User(null, createUserDTO.email(), createUserDTO.coren(), hashPassword, createUserDTO.name(), "anonimo.png");
 
         var userSaved = userRepository.save(user);
 
@@ -58,5 +59,15 @@ public class UserService {
         var nameSaved = userRepository.save(user);
 
         return nameSaved.getName();
+    }
+
+    public String updateAvatar(User user, UpdateAvatarDTO updateAvatarDTO) {
+        var newIcon = updateAvatarDTO.avatar();
+
+        user.setAvatar(newIcon);
+
+        var iconSaved = userRepository.save(user);
+
+        return iconSaved.getAvatar();
     }
 }

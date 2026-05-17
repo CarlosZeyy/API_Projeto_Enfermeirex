@@ -1,5 +1,6 @@
 package dev.carlosmoises.projeto.enferm.controller;
 
+import dev.carlosmoises.projeto.enferm.DTO.UpdateAvatarDTO;
 import dev.carlosmoises.projeto.enferm.DTO.UpdatePasswordDTO;
 import dev.carlosmoises.projeto.enferm.DTO.UserResponseDTO;
 import dev.carlosmoises.projeto.enferm.model.User;
@@ -23,7 +24,8 @@ public class UserController {
                 userLogged.getId(),
                 userLogged.getEmail(),
                 userLogged.getCoren(),
-                userLogged.getName()
+                userLogged.getName(),
+                userLogged.getAvatar()
         );
 
         return ResponseEntity.ok(user);
@@ -41,6 +43,15 @@ public class UserController {
         userService.updateName(userlogged, userResponseDTO);
 
         var response = new ResponseMessage("Nome alterado com sucesso");
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/avatar")
+    public ResponseEntity<ResponseMessage> updateAvatar(@AuthenticationPrincipal User userlogged, @RequestBody UpdateAvatarDTO updateAvatarDTO) {
+        userService.updateAvatar(userlogged, updateAvatarDTO);
+
+        var response = new ResponseMessage("Icone alterado com sucesso");
 
         return ResponseEntity.ok(response);
     }

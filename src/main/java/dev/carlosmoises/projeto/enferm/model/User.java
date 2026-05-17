@@ -32,6 +32,9 @@ public class User implements UserDetails {
 
     private String name;
 
+    @Column(name = "avatar")
+    private String avatar = "anonimo.png";
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
