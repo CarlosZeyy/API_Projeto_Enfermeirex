@@ -7,6 +7,7 @@ import dev.carlosmoises.projeto.enferm.repository.RefreshTokenRepository;
 import dev.carlosmoises.projeto.enferm.service.AuthenticationService;
 import dev.carlosmoises.projeto.enferm.service.TokenService;
 import dev.carlosmoises.projeto.enferm.service.UserService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -53,7 +54,7 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<ResponseMessage> forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) {
+    public ResponseEntity<ResponseMessage> forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) throws MessagingException {
         String responseMessage = authenticationService.requestPasswordReset(forgotPasswordDTO.identification());
 
         return ResponseEntity.ok(new ResponseMessage(responseMessage));

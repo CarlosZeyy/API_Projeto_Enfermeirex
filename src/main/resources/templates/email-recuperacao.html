@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="w=device-width, initial-scale=1.0">
+    <title>Recuperação de Senha - EnfermEX</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f8fafc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-font-smoothing: antialiased;">
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f8fafc; padding: 40px 10px;">
+    <tr>
+        <td align="center">
+
+            <table border="0" cellpadding="0" cellspacing="0" width="100%"
+                   style="max-width: 500px; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); border: 1px solid #e2e8f0;">
+
+                <tr>
+                    <td align="center" style="padding: 32px 32px 20px 32px; border-bottom: 1px solid #f1f5f9;">
+                        <table border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td style="font-size: 28px; font-weight: 800; color: #0f172a; letter-spacing: -1px;">
+                                    Enferm<span style="color: #dc2626;">EX</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="padding: 40px 32px;">
+                        <h2 style="margin: 0 0 16px 0; font-size: 20px; font-weight: 700; color: #0f172a;">
+                            Recuperação de Palavra-passe
+                        </h2>
+
+                        <p style="margin: 0 0 20px 0; font-size: 15px; line-height: 24px; color: #334155;">
+                            Olá, <strong style="color: #0f172a;" th:text="${username}">Profissional</strong>,
+                        </p>
+
+                        <p style="margin: 0 0 32px 0; font-size: 15px; line-height: 24px; color: #475569;">
+                            Recebemos uma solicitação para redefinir a senha da sua conta no sistema de gestão de Home
+                            Care <span style="font-weight: 600">EnfermEX</span>. Se não fez este pedido, pode ignorar
+                            este e-mail em segurança.
+                        </p>
+
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 32px;">
+                            <tr>
+                                <td align="center">
+                                    <a th:href="${resetLink}" target="_blank"
+                                       style="display: inline-block; padding: 14px 32px; background-color: #dc2626; color: #ffffff; font-size: 15px; font-weight: 700; text-decoration: none; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.2); transition: background-color 0.2s;">
+                                        Redefinir Minha Senha
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%"
+                               style="background-color: #f8fafc; border-radius: 12px; border: 1px solid #f1f5f9;">
+                            <tr>
+                                <td style="padding: 16px; font-size: 13px; line-height: 20px; color: #64748b;">
+                                    <strong style="color: #475569;">Aviso de Segurança:</strong> Este link é de uso
+                                    único e expira automaticamente por questões de segurança. Nunca partilhe este e-mail
+                                    com ninguém.
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="padding: 24px 32px; background-color: #f8fafc; border-top: 1px solid #f1f5f9; text-align: center; font-size: 12px; color: #94a3b8; line-height: 18px;">
+                        &copy; 2026 EnfermEX. Todos os direitos reservados.<br>
+                        Sistema de Gestão Home Care e Prontuários Digitais.
+                    </td>
+                </tr>
+
+            </table>
+
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

@@ -4,6 +4,8 @@ import dev.carlosmoises.projeto.enferm.model.PasswordResetToken;
 import dev.carlosmoises.projeto.enferm.model.User;
 import dev.carlosmoises.projeto.enferm.repository.PasswordResetTokenRepository;
 import dev.carlosmoises.projeto.enferm.repository.UserRepository;
+import jakarta.mail.MessagingException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -39,7 +41,10 @@ public class AuthenticationService implements UserDetailsService {
 
     }
 
-    public String requestPasswordReset(String identification) {
+    @Value("${URL}")
+    private String frontendUrl;
+
+    public String requestPasswordReset(String identification) throws MessagingException {
         var userExists = userRepository.findOptionalByEmailOrCoren(identification, identification);
 
         if (userExists.isEmpty()) {
@@ -75,7 +80,9 @@ public class AuthenticationService implements UserDetailsService {
 
         passwordResetTokenRepository.save(ticket);
 
-        emailService.sendPasswordResetEmail(userFound.getEmail(), "Recuperação de Senha", "Acesse o link para redefinir: http://localhost:5173/reset-password?token=" + token);
+        String linkComplete = frontendUrl + "/reset-password?token=" + token;
+
+        emailService.sendPasswordResetEmail(userFound.getEmail(), "Recuperação de Senha", linkComplete, userFound.getName());
 
         return finalMessage;
     }
